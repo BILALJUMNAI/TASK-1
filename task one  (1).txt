@@ -1,0 +1,122 @@
+# ==========================================
+# DATASET ANALYSIS PROJECT
+# ==========================================
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Dataset
+# Replace 'data.csv' with your dataset file
+df = pd.read_csv("data.csv")
+
+# ==========================================
+# 1. ASK QUESTIONS ABOUT THE DATASET
+# ==========================================
+
+print("\n===== DATASET QUESTIONS =====")
+print("1. How many rows and columns are in the dataset?")
+print("2. What variables (columns) are available?")
+print("3. Are there any missing values?")
+print("4. Which variables are numerical?")
+print("5. Which variables are categorical?")
+print("6. Are there any unusual values or outliers?")
+print("7. What trends or patterns exist in the data?")
+
+# ==========================================
+# 2. EXPLORE DATA STRUCTURE
+# ==========================================
+
+print("\n===== DATASET SHAPE =====")
+print(df.shape)
+
+print("\n===== COLUMN NAMES =====")
+print(df.columns)
+
+print("\n===== DATA TYPES =====")
+print(df.dtypes)
+
+print("\n===== FIRST 5 ROWS =====")
+print(df.head())
+
+# ==========================================
+# 3. SUMMARY STATISTICS
+# ==========================================
+
+print("\n===== DESCRIPTIVE STATISTICS =====")
+print(df.describe())
+
+# ==========================================
+# 4. CHECK FOR MISSING VALUES
+# ==========================================
+
+print("\n===== MISSING VALUES =====")
+print(df.isnull().sum())
+
+# ==========================================
+# 5. DETECT DUPLICATES
+# ==========================================
+
+print("\n===== DUPLICATE RECORDS =====")
+print(df.duplicated().sum())
+
+# ==========================================
+# 6. IDENTIFY TRENDS & PATTERNS
+# ==========================================
+
+numeric_cols = df.select_dtypes(include='number').columns
+
+if len(numeric_cols) > 0:
+    print("\n===== CORRELATION MATRIX =====")
+    print(df[numeric_cols].corr())
+
+# ==========================================
+# 7. VISUALIZATION
+# ==========================================
+
+if len(numeric_cols) > 0:
+    column = numeric_cols[0]
+
+    plt.figure(figsize=(6,4))
+    plt.hist(df[column], bins=10)
+    plt.title(f"Distribution of {column}")
+    plt.xlabel(column)
+    plt.ylabel("Frequency")
+    plt.show()
+
+# ==========================================
+# 8. HYPOTHESIS TESTING EXAMPLE
+# ==========================================
+
+if len(numeric_cols) > 0:
+    column = numeric_cols[0]
+
+    mean_value = df[column].mean()
+
+    print("\n===== HYPOTHESIS TEST =====")
+    print(f"Average value of {column}: {mean_value:.2f}")
+
+    if mean_value > 50:
+        print("Hypothesis: Mean is greater than 50 -> Supported")
+    else:
+        print("Hypothesis: Mean is greater than 50 -> Not Supported")
+
+# ==========================================
+# 9. DETECT DATA ISSUES
+# ==========================================
+
+print("\n===== DATA QUALITY CHECK =====")
+
+# Missing values
+if df.isnull().sum().sum() > 0:
+    print("Warning: Missing values found.")
+
+# Duplicates
+if df.duplicated().sum() > 0:
+    print("Warning: Duplicate records found.")
+
+# Negative values in numeric columns
+for col in numeric_cols:
+    if (df[col] < 0).any():
+        print(f"Warning: Negative values found in {col}")
+
+print("\nAnalysis Complete!")
